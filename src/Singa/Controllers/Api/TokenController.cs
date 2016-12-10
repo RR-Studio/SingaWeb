@@ -62,12 +62,13 @@ namespace Singa.ApiControllers
                 return claims;
 
             }
-            // Don't do this in production, obviously!
-            if (username == "TEST" && password == "TEST123")
+            
+            //Don't do this in production, obviously!
+            /*if (username == "TEST" && password == "TEST123")
             {
                 var claims = new ClaimsIdentity(new GenericIdentity(username, "Token"), new Claim[] { new Claim(ClaimsIdentity.DefaultRoleClaimType, "Admin") });
                 return claims;
-            }
+            }*/
 
             // Credentials are invalid, or account doesn't exist
             return null;

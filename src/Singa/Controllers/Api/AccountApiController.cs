@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Singa.Models;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Singa.Controllers.Api
 {
@@ -30,6 +31,7 @@ namespace Singa.Controllers.Api
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
 
+        [AllowAnonymous]
         [Route("register")]
         [HttpPost]
         public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
