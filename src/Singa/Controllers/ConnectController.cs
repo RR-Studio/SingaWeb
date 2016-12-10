@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Singa.Services;
 using Singa.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Singa.Controllers
 {
@@ -43,7 +44,7 @@ namespace Singa.Controllers
 
         #region Send Invite or Request
 
-        public async Task<IActionResult> Invite(int? id, Constants.InviteTypes invitationType)
+        public async Task<IActionResult> Invite(Constants.InviteTypes invitationType)
         {
             var loggedInUser = await GetCurrentUserAsync();
 
@@ -64,12 +65,12 @@ namespace Singa.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Invite(int? id, Constants.InviteTypes invitationType, NewMemberInvitationViewModel model)
+        public async Task<IActionResult> Invite(int id, Constants.InviteTypes invitationType, NewMemberInvitationViewModel model)
         {
-            try
-            {
-                var senderUser = await GetCurrentUserAsync();
+            var senderUser = await GetCurrentUserAsync();
 
+            try
+            {     
                 var memberInvitation = new MemberInvitation()
                 {
                     Guid = Guid.NewGuid().ToString(),
@@ -85,11 +86,14 @@ namespace Singa.Controllers
 
                 await _context.SaveChangesAsync();
 
-                SendInvitationEmail(memberInvitation, model);
+                Log.Debug("User {@senderUser} invited new member {@TargetPageId}", senderUser, id);
+
+                SendInvitationEmail(senderUser, id, model.UserMessage);
                 
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
+                Log.Error(ex, "User {@senderUser} invited new member {@TargetPageId}", senderUser, id);
             }
             
             model.MyInvites = new List<NewMemberInvitationViewModel>();
@@ -107,29 +111,31 @@ namespace Singa.Controllers
             return _userManager.GetUserAsync(HttpContext.User);
         }
 
-        private async void SendInvitationEmail(MemberInvitation memberInvitation, NewMemberInvitationViewModel model)
+        private async void SendInvitationEmail(ApplicationUser senderUser, int targetPageId, string message)
         {
             try
             {
                 string[] msgParam = new string[4];
 
-                msgParam[0] = memberInvitation.Senderid.UserName;
+                msgParam[0] = senderUser.UserName;
                 msgParam[1] = Url.Action("Register", "Account");
 
                 //ToDo
                 msgParam[2] = "";
-                msgParam[3] = string.IsNullOrEmpty(model.UserMessage) ? "" : "\n----------\n" + model.UserMessage + "\n----------\n";
-
-
+                msgParam[3] = string.IsNullOrEmpty(message) ? "" : "\n----------\n" + message + "\n----------\n";
+                
                 var strMsg = string.Format(Constants.InvitationString, msgParam);
 
-                var email = await _userManager.GetEmailAsync(memberInvitation.Senderid);
+                var email = await _userManager.GetEmailAsync(senderUser);
 
                 await _emailSender.SendEmailAsync(email, "Security Code", strMsg);
 
+                Log.Debug("{@SenderUser} sends invite email to a new member {@TargetPageId}", message, targetPageId);
+
             }
-            catch (Exception exc1)
+            catch (Exception ex)
             {
+                Log.Error(ex, "{@SenderUser} sends invite email to a new member {@TargetPageId}", message, targetPageId);
             }
         }
 
