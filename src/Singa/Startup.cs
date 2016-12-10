@@ -14,6 +14,8 @@ using Singa.Models;
 using Singa.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net;
 
 namespace Singa
 {
@@ -45,7 +47,21 @@ namespace Singa
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("Postgresql")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents
+            {
+                OnRedirectToLogin = ctx =>//костылиииии (Паша)
+                {
+                    if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
+                    {
+                        ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    }
+                    else
+                    {
+                        ctx.Response.Redirect(ctx.RedirectUri);
+                    }
+                    return Task.FromResult(0);
+                }
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
