@@ -13,6 +13,7 @@ using Singa.Data;
 using Singa.Models;
 using Singa.Services;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Singa
 {
