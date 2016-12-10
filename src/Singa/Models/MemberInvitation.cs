@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Singa.Models
 {
     public class MemberInvitation
     {
-        public DateTime Version { get; set; }
+        [Key]
         public string Guid { get; set; }
+        public DateTime Version { get; set; }
+        
         public string Email { get; set; }
         public ApplicationUser Senderid { get; set; }
         public int? BecameUserId { get; set; }
