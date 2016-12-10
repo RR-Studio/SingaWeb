@@ -1,14 +1,14 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Singa.Models
+namespace Singa.Models.ConnectViewModels
 {
-    public class MemberInvitation
+    public class NewMemberInvitationViewModel
     {
-        [Key]
         public string Guid { get; set; }
         public DateTime Version { get; set; }
-        
         public string Email { get; set; }
         public ApplicationUser Senderid { get; set; }
         public int? BecameUserId { get; set; }
@@ -17,9 +17,8 @@ namespace Singa.Models
         public int? TargetPageId { get; set; }
         public InviteTypes InvitationType { get; set; }
         public InvitationStatuses InvitationStatus { get; set; }
+
+        public IList<NewMemberInvitationViewModel> MyInvites { get; set; }
+
     }
-
-    public enum InviteTypes { Join = 0, Friend = 1, Group = 2 }
-
-    public enum InvitationStatuses { ConfirmedInvite, SentInvite}
 }
