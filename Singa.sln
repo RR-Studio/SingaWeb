@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DB5332E1-B04D-44C5-855B-D8D4264A3287}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{08767C5B-33EE-455E-9882-5E7F7800F039}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Singa", "src\Singa\Singa.xproj", "{91EB4845-54D5-4514-B738-0E017D80EF02}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91EB4845-54D5-4514-B738-0E017D80EF02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91EB4845-54D5-4514-B738-0E017D80EF02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91EB4845-54D5-4514-B738-0E017D80EF02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91EB4845-54D5-4514-B738-0E017D80EF02}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{91EB4845-54D5-4514-B738-0E017D80EF02} = {DB5332E1-B04D-44C5-855B-D8D4264A3287}
+	EndGlobalSection
+EndGlobal
