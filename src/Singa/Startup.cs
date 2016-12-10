@@ -13,6 +13,7 @@ using Singa.Data;
 using Singa.Models;
 using Singa.Services;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Singa
 {
@@ -48,6 +49,12 @@ namespace Singa
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
+
             services.AddMvc();
 
             // Add application services.
@@ -55,6 +62,8 @@ namespace Singa
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
             services.AddScoped<ApplicationDbContext>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +83,7 @@ namespace Singa
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseCors("AllowSpecificOrigin");
             app.UseStaticFiles();
 
             app.UseIdentity();
