@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net;
+using Serilog;
 
 namespace Singa
 {
@@ -27,6 +28,14 @@ namespace Singa
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.RollingFile(
+                "logs\\log-{Date}.txt",
+                Serilog.Events.LogEventLevel.Debug)
+                .WriteTo.LiterateConsole(Serilog.Events.LogEventLevel.Information)
+                .CreateLogger();
 
             if (env.IsDevelopment())
             {
@@ -85,8 +94,7 @@ namespace Singa
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            loggerFactory.AddSerilog();
 
             if (env.IsDevelopment())
             {
@@ -139,7 +147,7 @@ namespace Singa
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            });            
         }
     }
 }
