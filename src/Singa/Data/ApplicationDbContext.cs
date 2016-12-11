@@ -15,6 +15,8 @@ namespace Singa.Data
         {
         }
 
+        public DbSet<MemberInvitation> MemberInvitations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

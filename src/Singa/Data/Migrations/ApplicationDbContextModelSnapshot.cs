@@ -185,6 +185,35 @@ namespace Singa.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Singa.Models.MemberInvitation", b =>
+                {
+                    b.Property<string>("Guid");
+
+                    b.Property<int?>("BecameUserId");
+
+                    b.Property<DateTime?>("CreateDate");
+
+                    b.Property<string>("Email");
+
+                    b.Property<int>("InvitationStatus");
+
+                    b.Property<int>("InvitationType");
+
+                    b.Property<string>("SenderidId");
+
+                    b.Property<int>("Status");
+
+                    b.Property<int?>("TargetPageId");
+
+                    b.Property<DateTime>("Version");
+
+                    b.HasKey("Guid");
+
+                    b.HasIndex("SenderidId");
+
+                    b.ToTable("MemberInvitations");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole")
@@ -220,6 +249,13 @@ namespace Singa.Data.Migrations
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Singa.Models.MemberInvitation", b =>
+                {
+                    b.HasOne("Singa.Models.ApplicationUser", "Senderid")
+                        .WithMany()
+                        .HasForeignKey("SenderidId");
                 });
         }
     }
